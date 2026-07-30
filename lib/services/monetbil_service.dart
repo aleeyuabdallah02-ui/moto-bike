@@ -56,7 +56,7 @@ extension SubscriptionPlanDetails on SubscriptionPlan {
 /// here because we have no server to hold it safely. Accepted trade-off
 /// at this small scale. Move to backend/functions later if it grows.
 class MonetbilService {
-  static const String _serviceKey = 'PASTE_YOUR_MONETBIL_SERVICE_KEY_HERE';
+  static const String _serviceKey = 'fqxON52accQYsmaZJCpYzbCVJVfiST2W';
 
   static const String _widgetUrl = 'https://api.monetbil.com/widget/v2.1/';
   static const String _checkPaymentUrl = 'https://api.monetbil.com/payment/v1/checkPayment';
