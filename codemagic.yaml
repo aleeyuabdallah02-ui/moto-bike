@@ -1,42 +1,21 @@
 workflows:
   android-workflow:
-    name: Moto Taxi Cameroon - Android APK
+    name: Moto bike - Android APK
     max_build_duration: 60
     instance_type: mac_mini_m2
     environment:
       flutter: stable
+      vars:
+        PACKAGE_NAME: "com.example.mototaxi"
     scripts:
-      - name: Regenerate missing android/ folder
-        script: |
-          flutter create --platforms=android --org com.example .
-
-      - name: Copy google-services.json into place
-        script: |
-          cp google-services.json android/app/google-services.json
-
-      - name: Add Google services Gradle plugin (root build.gradle.kts)
-        script: |
-          sed -i '' 's/dependencies {/dependencies {\n        classpath("com.google.gms:google-services:4.4.1")/' android/build.gradle.kts
-
-      - name: Apply Google services plugin (app build.gradle.kts)
-        script: |
-          sed -i '' 's/id("dev.flutter.flutter-gradle-plugin")/id("dev.flutter.flutter-gradle-plugin")\n    id("com.google.gms.google-services")/' android/app/build.gradle.kts
-
-      - name: Fix NDK version (Firebase plugins need 27.x)
-        script: |
-          sed -i '' 's/ndkVersion = flutter.ndkVersion/ndkVersion = "27.0.12077973"/' android/app/build.gradle.kts
-
       - name: Get Flutter packages
         script: |
           flutter pub get
-
       - name: Build APK (release)
         script: |
           flutter build apk --release
-
     artifacts:
       - build/app/outputs/flutter-apk/*.apk
-
     publishing:
       email:
         recipients:
