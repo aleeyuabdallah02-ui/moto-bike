@@ -9,8 +9,36 @@ import 'theme/app_theme.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp();
-  runApp(const MotoTaxiApp());
+
+  String? initError;
+  try {
+    await Firebase.initializeApp();
+  } catch (e, stack) {
+    initError = 'Firebase init failed: $e\n\n$stack';
+  }
+
+  runApp(initError != null ? ErrorApp(message: initError) : const MotoTaxiApp());
+}
+
+class ErrorApp extends StatelessWidget {
+  final String message;
+  const ErrorApp({super.key, required this.message});
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      home: Scaffold(
+        backgroundColor: Colors.black,
+        body: SafeArea(
+          child: SingleChildScrollView(
+            padding: const EdgeInsets.all(16),
+            child: Text(message, style: const TextStyle(color: Colors.redAccent, fontSize: 12)),
+          ),
+        ),
+      ),
+    );
+  }
 }
 
 class MotoTaxiApp extends StatelessWidget {
@@ -27,10 +55,6 @@ class MotoTaxiApp extends StatelessWidget {
   }
 }
 
-/// ONE app, role-based. On launch: if the person already has an
-/// anonymous session, look up their stored role and route straight
-/// to the Client or Driver home screen. Otherwise show signup with
-/// the Client/Driver picker.
 class AuthGate extends StatelessWidget {
   const AuthGate({super.key});
 
@@ -61,7 +85,6 @@ class AuthGate extends StatelessWidget {
             if (role == 'driver') return const DriverHomeScreen();
             if (role == 'client') return const ClientHomeScreen();
 
-            // No role found (e.g. signup was interrupted) — start over.
             return const SignupScreen();
           },
         );
