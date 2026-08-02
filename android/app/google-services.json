@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "1092950617436",
+    "project_id": "moto-taxi-cameroon",
+    "storage_bucket": "moto-taxi-cameroon.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1092950617436:android:55fbe264c4d6cc8a3d6599",
+        "android_client_info": {
+          "package_name": "com.example.mototaxi"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC3U2Hj7mnb0M0vA881DTAtT9A2-X77UUI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
