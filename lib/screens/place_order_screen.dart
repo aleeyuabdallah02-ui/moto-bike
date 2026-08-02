@@ -1,9 +1,11 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import '../services/order_service.dart';
 import '../theme/app_theme.dart';
 import 'order_tracking_screen.dart';
+import 'subscription_payment_screen.dart';
 
 /// Client picks a destination on the map and requests a moto-taxi.
 class PlaceOrderScreen extends StatefulWidget {
@@ -21,6 +23,20 @@ class _PlaceOrderScreenState extends State<PlaceOrderScreen> {
 
   void _onMapTap(LatLng point) {
     setState(() => _destination = point);
+  }
+
+  Future<void> _openSubscription() async {
+    final uid = FirebaseAuth.instance.currentUser!.uid;
+    final snapshot = await FirebaseDatabase.instance.ref('clients/$uid/phoneNumber').get();
+    final phone = snapshot.value as String? ?? '';
+
+    if (!mounted) return;
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (_) => SubscriptionPaymentScreen(userId: uid, role: 'client', phoneNumber: phone),
+      ),
+    );
   }
 
   Future<void> _confirmOrder() async {
@@ -58,7 +74,16 @@ class _PlaceOrderScreenState extends State<PlaceOrderScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Zaɓi Inda Za Ka Tafi')),
+      appBar: AppBar(
+        title: const Text('Zaɓi Inda Za Ka Tafi'),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.payments_outlined),
+            tooltip: 'Subscription',
+            onPressed: _openSubscription,
+          ),
+        ],
+      ),
       body: Stack(
         children: [
           GoogleMap(
