@@ -8,7 +8,6 @@ import 'driver_home_screen.dart';
 
 /// Single signup screen for the whole app — person picks Client or
 /// Driver, then the same phone-only (no SMS OTP) flow applies to both.
-/// This is the ONE app, role-based, as originally planned.
 class SignupScreen extends StatefulWidget {
   const SignupScreen({super.key});
 
@@ -53,8 +52,6 @@ class _SignupScreenState extends State<SignupScreen> {
       final uid = userCredential.user!.uid;
       final db = FirebaseDatabase.instance.ref();
 
-      // Lightweight lookup node: lets main.dart quickly find a
-      // returning user's role without scanning both drivers/ and clients/.
       await db.child('users/$uid').set({'role': _role});
 
       final path = _role == 'driver' ? 'drivers' : 'clients';
@@ -63,9 +60,9 @@ class _SignupScreenState extends State<SignupScreen> {
         'phoneNumber': phone,
         'name': _nameController.text.trim(),
         'referralCode': referralCode.isEmpty ? null : referralCode,
+        'subscriptionActive': false, // both drivers AND clients pay subscription
         if (_role == 'driver') ...{
           'isOnline': false,
-          'subscriptionActive': false,
           'completedTrips': 0,
           'reportCount': 0,
           'trustLevel': 'newDriver',
@@ -100,8 +97,6 @@ class _SignupScreenState extends State<SignupScreen> {
         padding: const EdgeInsets.all(24),
         child: Column(
           children: [
-            // Role selector — the ONE decision that branches the rest
-            // of the signup flow and which home screen you land on.
             Row(
               children: [
                 Expanded(
