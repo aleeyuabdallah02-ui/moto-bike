@@ -45,8 +45,8 @@ class _SubscriptionPaymentScreenState extends State<SubscriptionPaymentScreen> {
   bool _submitting = false;
 
   // TODO: replace with the founder's real MTN MoMo / Orange Money numbers.
-  static const String momoNumber = '+237 6XX XXX XXX';
-  static const String orangeNumber = '+237 6XX XXX XXX';
+  static const String momoNumber = '+237679849700';
+  static const String orangeNumber = '+237691967650';
 
   Future<void> _submitReference() async {
     final ref = _referenceController.text.trim();
